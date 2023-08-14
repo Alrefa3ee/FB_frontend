@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import logo from './assets/logo.jpg';
-
+import axios from 'axios';
 
 export const User = () => {
     const [link, setLink] = useState("");
@@ -10,27 +10,27 @@ export const User = () => {
         setLink(e.target.value);
     }
 
-     async function handleSubmit(e) {
+     async function handleSubmit() {
+      console.log(link);
       const Token = localStorage.getItem("Token") 
       if (Token !== null && Token !== undefined && Token !== "" && Token !== "undefined"&& Token) {
         document.getElementById("container__url").style.display = "flex";
-        await fetch("http://localhost:5000/api/short", {
-        method: "POST",
-        mode: 'cors',
-          headers: new Headers({
-              'Content-type': 'application/json',
-              'Authorization': `Bearer ${Token}`, // notice the Bearer before your token
-          }),
-        body: JSON.stringify({ url: link }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          document.getElementById("short-t").textContent = data.shortUrl;
+        fetch("http://localhost:5000/api/short", {
+          method: "POST",
+          // mode: 'cors',
+            headers: new Headers({
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${Token}`
+            }),
+          body: JSON.stringify({ url: "https://www.google.com", code: "google"}),
         })
-        .catch((err) => {
-          console.log(err);
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
       else{
         document.getElementById("container__url").style.display = "none";
